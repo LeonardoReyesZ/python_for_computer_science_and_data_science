@@ -1,0 +1,16 @@
+Analyzing the Game of Craps) Modify the script of Fig. 4.2 to play 1,000,000 games
+of craps. Use a wins dictionary to keep track of the number of games won for a 
+particular number of rolls. Similarly, use a losses dictionary to keep track of 
+the number of games lost for a particular number of rolls. As the simulation proceeds,
+keep updating the dictionaries. A typical key–value pair in the wins dictionary might 
+be 4: 50217
+
+indicating that 50217 games were won on the 4th roll. Display a summary of the 
+results including:
+
+a) the percentage of the total games played that were won.
+b) the percentage of the total games played that were lost.
+c) the percentages of the total games played that were won or lost on a given roll
+(column 2 of the sample output).
+d) the cumulative percentage of the total games played that were won or lost up to
+and including a given number of rolls (column 3 of the sample output).
