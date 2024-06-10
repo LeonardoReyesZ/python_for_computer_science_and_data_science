@@ -1,4 +1,5 @@
-""" Script to track the number of games won for a particular number of rolls """
+""" Script to track the number of games won for a particular number of rolls
+    and make a dynamic visualization of the data"""
 import random
 
 # ~~~~~~~~~  Definition of Functions  ~~~~ ~~~~~~ ~~~~~~~~~~~~ ~~~~~~~~~~ ~~~~ ~~~~~ ~~~~~~~~~~ ~ #
@@ -50,7 +51,10 @@ def simulate_number_of_games(n_games):
     # play n_games and track victories and defeats for each number of rolls
     for roll in range(n_games):
         result, rolls_count = play_craps() # play game and get the results
-        # print(result)
+
+        # game won or lost after the 24th roll -> unlikely but possible
+        if rolls_count > 24:
+            rolls_count = 25
 
         # track victories and defeats
         if result == 'WON':
