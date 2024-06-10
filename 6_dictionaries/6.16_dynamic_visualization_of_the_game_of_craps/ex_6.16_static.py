@@ -1,5 +1,5 @@
 """ Script to track the number of games won for a particular number of rolls
-    and make a dynamic visualization of the data"""
+    and make a static visualization of the data """
 import random
 import matplotlib.pyplot as plt # matplotlib graphing capabilities
 import seaborn as sns # seaborn graphing capabilities
