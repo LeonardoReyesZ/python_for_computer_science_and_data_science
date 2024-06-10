@@ -1,5 +1,4 @@
-""" Script to track the number of games won for a particular number of rolls
-    and make a dynamic visualization of the data"""
+""" Script to track the number of games won for a particular number of rolls """
 import random
 
 # ~~~~~~~~~  Definition of Functions  ~~~~ ~~~~~~ ~~~~~~~~~~~~ ~~~~~~~~~~ ~~~~ ~~~~~ ~~~~~~~~~~ ~ #
