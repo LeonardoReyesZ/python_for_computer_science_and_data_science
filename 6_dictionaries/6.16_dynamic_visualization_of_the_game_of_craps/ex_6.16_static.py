@@ -47,8 +47,8 @@ def play_craps():
 # end play_craps
 
 def simulate_number_of_games(n_games):
-    wins_track = {}
-    losses_track = {}
+    # dictionary to track the victories and defeats
+    rolls = {'wins': {}, 'losses': {}}
 
     # play n_games and track victories and defeats for each number of rolls
     for roll in range(n_games):
@@ -62,39 +62,41 @@ def simulate_number_of_games(n_games):
         # track victories and defeats
         if result == 'WON':
             # if the number of rolls played is already in the wins_track dictionary
-            if rolls_count in wins_track:
-                wins_track[rolls_count] += 1 # increment the counter
+            if rolls_count in rolls['wins']:
+                rolls['wins'][rolls_count] += 1 # increment the counter
             # if the number of rolls played is not in the wins_track dictionary
             else:
-                wins_track[rolls_count] = 1 # added it with counter 1
+                rolls['wins'][rolls_count] = 1 # added it with counter 1
         else:
             # if the number of rolls played is already in the losses_track dictionary
-            if rolls_count in losses_track:
-                losses_track[rolls_count] += 1 # increment the counter
+            if rolls_count in rolls['losses']:
+                rolls['losses'][rolls_count] += 1 # increment the counter
             # if the number of rolls played is not in the losses_track dictionary
             else:
-                losses_track[rolls_count] = 1 # added it with counter 1
+                rolls['losses'][rolls_count] = 1 # added it with counter 1
 
-    # sort the dictionaries
-    wins_track = dict(sorted(wins_track.items()))
-    losses_track = dict(sorted(losses_track.items()))
-
-    return wins_track, losses_track
+    return rolls
 # end simulate_number_of_games
 
 
 # ~~~~~~~~~  Program Execution     ~~ ~~~~ ~~~~~~ ~~~~~~~~~~~~ ~~~~~~~~~~ ~~~~ ~~~~~ ~~~~~~~~~~ ~ #
 # play 'n_games' games and get the victories and defeats in lists
 n_games = 1000000 # games to play
-wins, losses = simulate_number_of_games(n_games)
-setValues = set(wins.keys()).union(set(losses.keys())) # get all the rolls
+rolls = simulate_number_of_games(n_games) # get the victories and defeats
 
+# sort the data
+rolls['wins'] = dict(sorted(rolls['wins'].items()))
+rolls['losses'] = dict(sorted(rolls['losses'].items()))
+
+setValues = set(rolls['wins'].keys()).union(set(rolls['losses'].keys())) # get all the rolls
+
+# convert the data for better flexibility
 values = np.arange(1, len(setValues)+1) # for flexibility
-wins = list(wins.values()) # for simplicity
-losses = list(losses.values()) # for simplicity
+wins = list(rolls['wins'].values()) # for simplicity
+losses = list(rolls['losses'].values()) # for simplicity
 
 # creating the initial bar plot with increased figure size and adjusted dodge
-plt.figure(figsize=(25, 15)) # increase figure size
+plt.figure(figsize=(13, 6)) # increase figure size
 title = 'Dice Game of Craps'
 sns.set_style('whitegrid')
 # set the title and labels
@@ -116,10 +118,12 @@ plt.legend()
 
 # display text above each bar for games won
 for i, frequency in enumerate(wins):
-    plt.text( values[i]-offset, frequency, f'{frequency}\n{frequency/n_games:.2%}', ha='center', va='bottom' )
+    plt.text( values[i]-offset, frequency, f'{frequency}\n{frequency/n_games:.2%}',
+              ha='center', va='bottom',fontsize=6)
 
 # display text above each bar for games lost
 for i, frequency in enumerate(losses):
-    plt.text( values[i]+offset, frequency, f'{frequency}\n{frequency/n_games:.2%}', ha='center', va='bottom' )
+    plt.text( values[i]+offset, frequency, f'{frequency}\n{frequency/n_games:.2%}',
+              ha='center', va='bottom', fontsize=6)
 
 plt.show()
