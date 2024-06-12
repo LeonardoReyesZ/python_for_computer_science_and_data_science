@@ -106,7 +106,6 @@ def update(frame_number, n_games, rolls, bar_width, offset):
         for i, frequency in enumerate(losses):
             plt.text(values[i] + offset, frequency, f'{frequency}\n{frequency / gamesPlayed:.1%}',
                      ha='center', va='bottom', fontsize=3.5)
-
 # end function update
 
 
