@@ -25,9 +25,9 @@ def play_craps():
     sum_of_dice = sum( die_values )
 
     if sum_of_dice in (7, 11): # win
-        game_status = 'WON'
+        game_status = 'WINS'
     elif sum_of_dice in (2,3,12): # lose
-        game_status = 'LOST'
+        game_status = 'LOSSES'
     else: # remember point
         game_status = 'CONTINUE'
         my_point = sum_of_dice
@@ -41,9 +41,9 @@ def play_craps():
         sum_of_dice = sum(die_values)
 
         if sum_of_dice == my_point: # win by making point
-            game_status = 'WON'
+            game_status = 'WINS'
         elif sum_of_dice == 7: # lose by rolling 7
-            game_status = 'LOST'
+            game_status = 'LOSSES'
 
     return game_status, rolls_count # return the result of the game and the number of rolls played
 # end play_craps
@@ -51,59 +51,48 @@ def play_craps():
 # function update -> simulating 'n_games' the game of craps and updating victories and defeats
 def update(frame_number, n_games, rolls, bar_width, offset):
     """ Configures bar plot contents for each animation frame. """
-    # play n_games and update victories and defeats for each number of rolls
-    for roll in range(n_games):
+    # play n_games and update victories and defeats for each roll
+    for _ in range(n_games):
         result, rolls_count = play_craps() # play game and get the results
 
         # game won or lost after the 24th roll -> unlikely but possible
         # restrict data till the 15th roll to have a better visualization
-        if rolls_count > 14:
-            rolls_count = 15
+        rolls_count = min(rolls_count,15)
 
         # track victories and defeats
-        if result == 'WON':
-            # if the number of rolls played is already in the wins_track dictionary
-            if rolls_count in rolls['wins']:
-                rolls['wins'][rolls_count] += 1 # increment the counter
-            # if the number of rolls played is not in the wins_track dictionary
-            else:
-                rolls['wins'][rolls_count] = 1 # added it with counter 1
-        else:
-            # if the number of rolls played is already in the losses_track dictionary
-            if rolls_count in rolls['losses']:
-                rolls['losses'][rolls_count] += 1 # increment the counter
-            # if the number of rolls played is not in the losses_track dictionary
-            else:
-                rolls['losses'][rolls_count] = 1 # added it with counter 1
+        rolls[result][rolls_count] += 1
 
-        # get the total games played till now
-        gamesPlayed = sum(rolls['wins'].values()) + sum(rolls['losses'].values())
+    # get the total games played till now
+    gamesPlayed = sum(rolls['WINS'].values()) + sum(rolls['LOSSES'].values())
 
-        # convert data for flexibility
-        values = np.arange(1, len(rolls['wins'].keys()) + 1)  # for flexibility
-        wins = list(rolls['wins'].values())  # for simplicity
-        losses = list(rolls['losses'].values())  # for simplicity
+    # convert data for flexibility
+    values = np.arange(1, 16)  # for flexibility
+    wins = [rolls['WINS'][i] for i in values]  # for simplicity
+    losses = [rolls['LOSSES'][i] for i in values] # for simplicity
 
-        # reconfigure plot for updated die frequencies
-        plt.cla() # clear old contents contents of current figure
-        plt.xlabel('Roll')
-        plt.ylabel('Number of Games')
-        plt.xticks(values)  # Set x-ticks to be the rolls
+    # reconfigure plot for updated die frequencies
+    plt.cla() # clear old contents contents of current figure
+    plt.xlabel('Roll')
+    plt.ylabel('Number of Games')
+    plt.xticks(values)  # Set x-ticks to be the rolls
 
-        # plot the games won
-        plt.bar(values - offset, wins, width=bar_width, label='Games Won', color='blue')
-        # plot the games lost with an offset
-        plt.bar(values + offset, losses, width=bar_width, label='Games Lost', color='red')
-        # add a legend to differentiate the two sets of bars
-        plt.legend()
+    # plot the games won
+    plt.bar(values - offset, wins, width=bar_width, label='Games Won', color='blue')
+    # plot the games lost with an offset
+    plt.bar(values + offset, losses, width=bar_width, label='Games Lost', color='red')
+    # add a legend to differentiate the two sets of bars
+    plt.legend()
 
-        # display text above each bar for games won and their corresponding percentage
-        for i, frequency in enumerate(wins):
+    # display text above each bar for games won and their corresponding percentage
+    # display only if the value is higher than 0 to optimization purposes
+    for i, frequency in enumerate(wins):
+        if frequency > 0:
             plt.text(values[i] - offset, frequency, f'{frequency}\n{frequency / gamesPlayed:.1%}',
                      ha='center', va='bottom', fontsize=3.5)
 
-        # display text above each bar for games lost
-        for i, frequency in enumerate(losses):
+    # display text above each bar for games lost
+    for i, frequency in enumerate(losses):
+        if frequency > 0:
             plt.text(values[i] + offset, frequency, f'{frequency}\n{frequency / gamesPlayed:.1%}',
                      ha='center', va='bottom', fontsize=3.5)
 # end function update
@@ -121,11 +110,11 @@ offset = bar_width / 2
 
 # play 'n_games' games and get the victories and defeats in dictionaries
 n_games = number_of_frames = 1000000 # games to play
-rolls_per_frame = 1 # just for this exercise
+rolls_per_frame = 1 # just for this exerc   ise
 
 rolls = {
-    'wins': {i: 0 for i in range(1, 16)},
-    'losses': {i: 0 for i in range(1, 16)}
+    'WINS': {i: 0 for i in range(1, 16)},
+    'LOSSES': {i: 0 for i in range(1, 16)}
 }
 
 # configure and start the animation that calls function update
