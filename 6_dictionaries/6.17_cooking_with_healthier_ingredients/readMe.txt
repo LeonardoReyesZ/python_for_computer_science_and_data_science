@@ -5,7 +5,7 @@ In preparation for that exercise, create a dictionary that maps ingredients
 to lists of potential replacements. Some ingredient replacements are shown below:
 
 
-dictionary keys
+Ingredients:
 1 cup sour cream
 1 cup milk
 1 teaspoon lemon juice
@@ -17,7 +17,7 @@ dictionary keys
 1 cup milk
 1 cup oil
 
-dictionary values -> healthier replacements
+healthier replacements
 1 cup yogurt
 1/2 cup evaporated milk and 1/2 cup water
 1/2 teaspoon vinegar
