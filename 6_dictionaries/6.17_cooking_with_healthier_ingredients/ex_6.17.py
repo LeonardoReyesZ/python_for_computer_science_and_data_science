@@ -1,48 +1,5 @@
-""" Script to find and recommend healthy ingredients for a specific recipe.
+""" Script to map potential healthy ingredients for a specific recipe.
     Ingredients are stored in dictionaries """
-
-import re
-
-
-# ~~~~~~~  Definition of Functions   ~~~~~ ~~~~~~ ~~~~~~~ ~~~~~~~~~ ~~~~~~~~~~~~~ ~~~~~~~ ~ #
-def multiply_numeric_values(string, factor):
-    """Multiply the numbers in a string by a factor and return a string with the updated values."""
-    pattern = re.compile(r'(\d+/\d+|\d+(\.\d+)?)')
-
-    def replace(match):
-        value = match.group(0)
-        if '/' in value:
-            numerator, denominator = map(int, value.split('/'))
-            new_value = factor * numerator / denominator
-            return f'{new_value:.1f}' if new_value % 1 != 0 else f'{int(new_value)}'
-        else:
-            new_value = float(value) * factor
-            return f'{new_value:.1f}' if new_value % 1 != 0 else f'{int(new_value)}'
-
-    return pattern.sub(replace, string)
-
-def parse_ingredient(ingredient):
-    """Get and return the amount, unit, and ingredient contained in a string."""
-    pattern = re.compile(r'([\d/?\d?]+)\s*([a-zA-Z]+)?\s+(.+)')
-    match = pattern.match(ingredient)
-    return match.groups() if match else (None, None, None)
-
-def find_replacement(recipe):
-    """Find healthier ingredients to replace a recipe."""
-    for element in recipe:
-        amount, unit, ingredient = parse_ingredient(element)
-        if ingredient in healthier_replacements:
-            replacements = healthier_replacements[ingredient]
-            key = f'1 {unit}' if unit else '1'
-            if key in replacements:
-                new_ingredient = replacements[key]
-                replace = multiply_numeric_values(new_ingredient, int(amount))
-                print(f'{amount} {unit or ""} {ingredient} -> {replace}', end="\n\n")
-            else:
-                print(f'No replacement found for {element}')
-        else:
-            print(f'No replacement found for {element}')
-
 
 # ~~~~~~~~~  Dictionaries         ~~ ~~~~ ~~~~~~ ~~~~~~~~~~~~ ~~~~~~~~~~ ~~~~ ~~~~~ ~~~~~~~~~~ ~ #
 healthier_replacements = {
@@ -76,23 +33,10 @@ healthier_replacements = {
     }
 }
 
-# Sample user input and usage
-recipe = [
-    '1 cup sour cream',
-    '7 cup milk',
-    '3 teaspoon lemon juice',
-    '7 cup sugar',
-    '4 cup butter',
-    '10 cup flour',
-    '2 cup mayonnaise',
-    '3 egg',
-    '6 cup oil'
-]
+# list of ingredients with default values
+ingredients = ['milk', 'oil', 'egg']
 
-# ~~~~~~~~~  Program Execution     ~~ ~~~~ ~~~~~~ ~~~~~~~~~~~~ ~~~~~~~~~~ ~~~~ ~~~~~ ~~~~~~~~~~ ~ #
-print("Original recipe:")
-for ingredient in recipe:
-    print(ingredient)
-
-print("\n\nHealthier ingredients for the recipe:")
-find_replacement(recipe)
+# map potential replacements for default values
+for ingredient in ingredients:
+    print( f"Potential healthier replacement for {ingredient}:\n"
+           f"{healthier_replacements[ingredient]}\n" )
