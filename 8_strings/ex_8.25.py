@@ -12,7 +12,7 @@ cleaned_text = re.sub(r'-+', ' ', cleaned_text)  # Replace one or more hyphens w
 words = cleaned_text.split()
 
 # split text into sentences
-sentence_pattern = r'(?<!\d)(?<!\b[A-Z])\s*[.!?:;]+|--'
+sentence_pattern = r'(?<!\d)(?<!\b[A-Z])\s*[.!?:;]+(?!\s*")|--'
 sentences = re.split(sentence_pattern, text)
 sentences = [sentence.strip() for sentence in sentences]
 
